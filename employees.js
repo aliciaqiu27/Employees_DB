@@ -17,7 +17,7 @@ var connection = mysql.createConnection({
 });
 
 
-function findEmployees() {
+const findEmployees = () => {
   inquirer
     .prompt({
       name: "category",
@@ -33,54 +33,54 @@ function findEmployees() {
         "Update employee roles",
       ]
     })
-    .then(function(answer) {
+    .then(function (answer) {
       switch (answer.category) {
-      case "View departments":
-        viewDepartment();
-        break;
-      case "View roles":
-        viewRoles();
-        break;
-      case "View employees":
-        viewEmployees();
-        break;
+        case "View departments":
+          viewDepartment();
+          break;
+        case "View roles":
+          viewRoles();
+          break;
+        case "View employees":
+          viewEmployees();
+          break;
 
-      case "Add departments":
-        addDepartments();
-        break;
+        case "Add departments":
+          addDepartments();
+          break;
 
-      case "Add employees":
-        addEmployees();
-        break;
+        case "Add employees":
+          addEmployees();
+          break;
 
-      case "Add roles":
-        addRole();
-        break;
+        case "Add roles":
+          addRole();
+          break;
 
-      case "Update employee roles":
-        updateRoles();
-        break;
+        case "Update employee roles":
+          updateRoles();
+          break;
 
-      case "exit":
-        connection.end();
-        break;
+        case "exit":
+          connection.end();
+          break;
       }
     });
 }
 
-function viewDepartment() {
+const viewDepartment = () => {
   var query = "SELECT * FROM department";
-  connection.query(query, function (err, res) {
+  connection.query(query, (err, res) => {
     if (err) throw err;
     console.table(res);
     findEmployees();
-    }
+  }
   );
 }
 
-function viewRoles() {
+const viewRoles = () => {
   var query = "SELECT * FROM role";
-  connection.query(query, function (err, res) {
+  connection.query(query, (err, res) => {
     if (err) throw err;
     console.table(res);
     findEmployees();
@@ -88,32 +88,31 @@ function viewRoles() {
   );
 }
 
-function viewEmployees() {
+const viewEmployees = () => {
   var query = "SELECT * FROM employee";
-  connection.query(query, function (err, res) {
+  connection.query(query, (err, res) => {
     if (err) throw err;
     console.table(res);
     findEmployees();
   }
   );
 }
-
 
 function addDepartments() {
-    inquirer
-      .prompt({
-        name: "addDepartments",
-        type: "input",
-        message: "What department would you like to add?",
-      })
-      .then(function (answer) {
+  inquirer
+    .prompt({
+      name: "addDepartments",
+      type: "input",
+      message: "What department would you like to add?",
+    })
+    .then(function (answer) {
       var query = "INSERT INTO department (name) VALUES (?)";
-      connection.query(query, answer.addDepartments, function (err) {
-      if (err) throw err;
-      viewDepartment();
-  }
-  );
-});
+      connection.query(query, answer.addDepartments, (err) => {
+        if (err) throw err;
+        viewDepartment();
+      }
+      );
+    });
 }
 
 function addEmployees() {
@@ -175,6 +174,33 @@ function addRole() {
     });
 }
 
+
+// function updateRoles() {
+//   inquirer
+//     .prompt([{
+//       name: "addTitle",
+//       type: "input",
+//       message: "Do y?",
+//     },
+//     {
+//       name: "addSalary",
+//       type: "input",
+//       message: "What the employee's salary?",
+//     },
+//     {
+//       name: "addDepartment",
+//       type: "input",
+//       message: "What is the employee's department ID?",
+//     }])
+//     .then(function (answer) {
+//       var query = ""
+//       if (err) throw err;
+//       viewRoles();
+//     }
+//     );
+// }
+
+
 // function readEmployees() {
 //   console.log("Selecting all employees...\n");
 //   connection.query("SELECT * FROM employee", function(err, res) {
@@ -185,8 +211,8 @@ function addRole() {
 //   });
 // }
 
-connection.connect(function (err) { 
-  if (err) throw err; 
-  console.log("connected as id " + connection.threadId + "\n"); 
+connection.connect(function (err) {
+  if (err) throw err;
+  console.log("connected as id " + connection.threadId + "\n");
   findEmployees();
 });
